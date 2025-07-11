@@ -1,21 +1,19 @@
-"""
-This file handles the download of videos from streams.
-The tool used here is 
-"""
-
 # scripts/download_video.py
-
+"""
+This python scripts handles video downloading in bulk. 
+It's only work when called in the anaconda terminal
+"""
 import yt_dlp
 import os
 
 # Set the output directory
-OUTPUT_DIR = "../videos"
+OUTPUT_DIR = "D:/Stream_data_process/videos"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Example video list — replace with your own links later
 video_urls = [
     # format: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_1",
-    "https://www.youtube.com/watch?v=0Hv7q6vdrVs",
+    "https://www.youtube.com/watch?v=FlqKeW1iWyU",
 ]
 
 # Download options
