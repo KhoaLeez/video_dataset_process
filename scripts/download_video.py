@@ -7,7 +7,7 @@ import yt_dlp
 import os
 
 # Set the output directory
-OUTPUT_DIR = "D:/Stream_data_process/videos"
+OUTPUT_DIR = "D:/Stream_data_process/videos" # change this to match your directory
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Example video list — replace with your own links later
