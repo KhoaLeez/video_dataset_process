@@ -5,6 +5,18 @@ It's only work when called in the anaconda terminal
 """
 import yt_dlp
 import os
+import re
+import json
+
+def load_urls(file_path):
+    """Load a bunch of URLs from a JSON/text file"""
+    if file_path.endswith('.json'):
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            return data.get('urls', [])
+    else: 
+        with open(file_path, 'r') as f:
+            return [line.strip() for line in f if line.strip()]
 
 # Set the output directory
 OUTPUT_DIR = "D:/Stream_data_process/videos" # change this to match your directory
