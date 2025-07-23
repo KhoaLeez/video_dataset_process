@@ -22,12 +22,6 @@ def load_urls(file_path):
 OUTPUT_DIR = "D:/Stream_data_process/videos" # change this to match your directory
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Example video list — replace with your own links later
-video_urls = [
-    # format: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_1",
-    "https://www.youtube.com/watch?v=FlqKeW1iWyU",
-]
-
 # Download options
 ydl_opts = {
     "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4",
