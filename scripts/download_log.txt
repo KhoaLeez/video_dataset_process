@@ -1,0 +1,6 @@
+2025-07-23 17:43:38,800 - ERROR - Invalid regex pattern: missing ), unterminated subpattern at position 10
+2025-07-23 17:43:38,801 - ERROR - Invalid regex pattern: missing ), unterminated subpattern at position 10
+2025-07-23 17:43:38,801 - ERROR - Invalid regex pattern: missing ), unterminated subpattern at position 10
+2025-07-23 19:45:07,839 - INFO - Successfully downloaded: https://www.youtube.com/watch?v=dlSw0OicMII
+2025-07-23 19:45:15,734 - INFO - Successfully downloaded: https://www.youtube.com/watch?v=ibCoLMjwJ1g
+2025-07-23 19:45:22,848 - INFO - Successfully downloaded: https://www.youtube.com/watch?v=7PeDk9LD_Xg

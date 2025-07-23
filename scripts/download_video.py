@@ -25,18 +25,29 @@ logging.basicConfig(
 
 def load_urls(file_path):
     # Load a bunch of URLs from a JSON/text file
-    if file_path.endswith('.json'):
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-            return data.get('urls', [])
-    else: 
-        with open(file_path, 'r') as f:
-            return [line.strip() for line in f if line.strip()]
+    try:
+        if file_path.endswith('.json'):
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                return data.get('urls', [])
+        else: # For .txt file
+            with open(file_path, 'r') as f:
+                return [line.strip() for line in f if line.strip()]
+    except Exception as e:
+        logging.error(f"Failed to load URLs from {file_path}: {str(e)}")
+        print(f"Error loading URLs: {str(e)}")
+        return []
 
 def is_valid_url(url):
-    # A siple url validation with regex
-    link = r'^https?://(www\)?[\w-]+\\w{2,}/.*$'
-    return bool(re.match(link, url))
+    """Basic URL validation."""
+    regex = r'^https?://([\w-]+\.)+[\w-]{2,}/.*$'
+    print(f"Validating URL '{url}' with regex: {regex}")
+    try:
+        return bool(re.match(regex, url))
+    except re.error as e:
+        logging.error(f"Invalid regex pattern in is_valid_url: {str(e)} (Pattern: {regex})")
+        print(f"Error in URL validation: {str(e)} (Pattern: {regex})")
+        return False
 
 def check_disk_space(path, min_space_gb=5):
     # Ensure there is enough space for a video download
@@ -58,7 +69,7 @@ ydl_opts = {
 }
 
 def download_video(url, max_retries=3):
-    # Download a single video with retrying
+    # Download a single video with retries
     retry_count = 0
     while retry_count < max_retries:
         try:
@@ -90,7 +101,6 @@ def download_video_with_progress(url):
         logging.error(f"Skipping {url} due to low disk space")
         return
     
-
     ydl_opts_with_progress = ydl_opts.copy()
     ydl_opts_with_progress['progress_hooks'] = [progress_hook]
     download_video(url)
@@ -103,4 +113,5 @@ def download_videos_parallel(urls, max_downloader = 4):
 if __name__ == "__main__":
     video_urls = load_urls('video_urls.json')
     video_urls = [url for url in video_urls if is_valid_url(url)]
+    
     download_videos_parallel(video_urls)
