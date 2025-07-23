@@ -9,6 +9,8 @@ import re
 import json
 import logging
 from time import sleep
+from concurrent.futures import ThreadPoolExecutor
+import shutil
 
 # Set the output directory
 OUTPUT_DIR = "D:/Stream_data_process/videos" # change this to match your directory
@@ -35,6 +37,15 @@ def is_valid_url(url):
     # A siple url validation with regex
     link = r'^https?://(www\)?[\w-]+\\w{2,}/.*$'
     return bool(re.match(link, url))
+
+def check_disk_space(path, min_space_gb=5):
+    # Ensure there is enough space for a video download
+    total, used, free = shutil.disk_usage(path)
+    free_gb = free / (1024 ** 3)
+    if free_gb < min_space_gb:
+        logging.error(f"Not enough space: {free_gb:.2f} GB")
+        return False
+    return True
 
 # Download options
 ydl_opts = {
@@ -64,10 +75,32 @@ def download_video(url, max_retries=3):
                 print(f"Failed: {url} after {max_retries} attempts")
                 return
             sleep(2**retry_count) # Exponential backoff
-                
+
+# Some progress reporting thing:
+def download_video_with_progress(url):
+    # Download with progress reporting
+    def progress_hook(d):
+        if d['status'] == 'downloading':
+            print(f"{url}: {d.get('download_bytes', 0) / 1024**2:.2f} MB /" 
+                  f"{d.get('total_bytes', 0) / 1024**2:.2f} MB")
+        elif d['status'] == 'finished':
+            print(f"Finished: {url}")
+    
+    if not check_disk_space(OUTPUT_DIR):
+        logging.error(f"Skipping {url} due to low disk space")
+        return
+    
+
+    ydl_opts_with_progress = ydl_opts.copy()
+    ydl_opts_with_progress['progress_hooks'] = [progress_hook]
+    download_video(url)
+
+def download_videos_parallel(urls, max_downloader = 4):
+    # To download multiple video at a time
+    with ThreadPoolExecutor(max_workers=max_downloader) as executor:
+        executor.map(download_video_with_progress, urls)
+
 if __name__ == "__main__":
     video_urls = load_urls('video_urls.json')
     video_urls = [url for url in video_urls if is_valid_url(url)]
-    for url in video_urls:
-        print(f"Downloading: {url}")
-        download_video(url)
+    download_videos_parallel(video_urls)
