@@ -6,3 +6,4 @@ frames/
 *.csv
 *.png
 download_log.txt
+pulse_analysis_log.txt
