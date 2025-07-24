@@ -18,3 +18,8 @@ dependencies:
       - deepface
       - fer
       - ffmpeg-python
+      - Pillow
+      - aiortc
+      - av
+      - torch
+      - torchvision
